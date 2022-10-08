@@ -15,8 +15,10 @@ const resolvers = {
       }
     },
     me: async (parent, args, context) => {
-      try {
-        const user = User.findById(context.user._id);
+        
+        console.log("6340ccfa50640570924e36da");
+        try {
+        const user = User.findById("6340ccfa50640570924e36da");
         if (!user) throw new Error({ message: "Not logged in!" });
         return user;
       } catch (error) {
@@ -26,7 +28,7 @@ const resolvers = {
   },
 
   Mutation: {
-    addUser: async (parent, { username, email, password }) => {
+    addUser: async (parent, { username, email, password}) => {
       const newUser = await User.create({ username, email, password });
 
       const token = signToken({
@@ -60,27 +62,42 @@ const resolvers = {
     // save a book to a user's `savedBooks` field by adding it to the set (to prevent duplicates)
     // user comes from `req.user` created in the auth middleware function
     saveMovie: async (parent, args, context) => {
-      console.log("THIS WILL FIRE IF WE HIT THIS LINE");
+      console.log("THIS WILL FIRE IF WE HIT THIS");
       try {
-        if (context.user) {
+        if (true) {
+            const newarg = {... args}
+            console.log(newarg);
           return await User.findOneAndUpdate(
-            { _id: context.user._id },
-            { $addToSet: { savedMovies: args } },
-            { new: true, runValidators: true }
+            { _id: "63411e20d7f5a5594cd7b69d" },
+            { $addToSet: { "savedMovies": {input: { movieId: '123456', title: 'minions' }} } },
+            { new: true }
           );
         } else throw new Error({ message: "Not logged in!" });
       } catch (err) {
         console.log(err);
-        throw new Error(err);
+        throw new Error({ message: "WTF" });
       }
     },
+
+
+
+
+
+
+
+
+
+
+
+
+
     // remove a book from `savedBooks`
     removeMovie: async (parent, args, context) => {
       try {
         if (context.user) {
           const updatedUser = await User.findOneAndUpdate(
             { _id: context.user._id },
-            { $pull: { savedMovies: { ...args } } },
+            { $pull: { savedMovies: "movie2" } },
             { new: true }
           );
           if (!updatedUser) {

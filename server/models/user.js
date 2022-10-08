@@ -1,15 +1,5 @@
-// const { Schema, model} = require('mongoose');
-
-// const userSchema = new Schema({
-//     username: String,
-//     email: String,
-//     password: String,
-
-// });
-
-// module.exports = model('User', userSchema);
-
 const { Schema, model } = require('mongoose');
+const movieSchema = require('./movie');
 const bcrypt = require('bcrypt');
 
 const userSchema = new Schema({
@@ -32,16 +22,7 @@ const userSchema = new Schema({
     maxlength: 30,
     minlength: 5
   },
-  profile_picture: {
-    type: String,
-    default: null
-  },
-  servers: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Server',
-    },
-  ],
+  savedMovies: [movieSchema],
 });
 
 userSchema.pre('save', async function (next) {
